@@ -23,6 +23,8 @@ async function getWeatherHandler(request, response) {
 
   const url = `http://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${key}`;
 
+  console.log('url', url);
+
   const weatherResponse = await superagent.get(url);
 
   const weatherObject = JSON.parse(weatherResponse.text);
@@ -42,6 +44,19 @@ class Forecast {
   }
 }
 
+async function getMoviesHandler(request, response) {
+  const key = process.env.MOVIE_API_KEY;
+  const query = 'Seattle';
+  const url = `https://api.themoviedb.org/3/search/movie/?api_key=${key}&query=${query}`;
+  // console.log('url', url);
+  const moviesResponse = await superagent.get(url);
+  const movies = JSON.stringify(moviesResponse.text);
+  // console.log('movies', movies);
+  response.send(movies);
+}
+
 app.get('/weather', getWeatherHandler);
+
+app.get('/movies', getMoviesHandler);
 
 app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
